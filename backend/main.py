@@ -12,22 +12,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-blogs = [
-    Blog(
-        id=1,
-        title="First Blog",
-        content="Hello world!",
-        author="Sadaf",
-        created_at=datetime.now(),
-    ),
-    Blog(
-        id=2,
-        title="AI Blog",
-        content="Let’s build something awesome.",
-        author="Sadaf",
-        created_at=datetime.now(),
-    ),
-]
+# blogs = [
+#     Blog(
+#         id=1,
+#         title="First Blog",
+#         content="Hello world!",
+#         author="Sadaf",
+#         created_at=datetime.now(),
+#     ),
+#     Blog(
+#         id=2,
+#         title="AI Blog",
+#         content="Let’s build something awesome.",
+#         author="Sadaf",
+#         created_at=datetime.now(),
+#     ),
+# ]
 
 DATA_FILE = "blogs.json"
 
@@ -46,6 +46,7 @@ def save_blogs(blogs):
 
 @app.get("/blogs")
 def get_blogs():
+    blogs = load_blogs()
     return blogs
 
 
@@ -60,7 +61,7 @@ def get_single_blog(blog_id: int):
 @app.post("/blogs")
 def create_blog(blog: Blog):
     blogs = load_blogs()
-    blog_dict= blog.model_dump()
+    blog_dict = blog.model_dump()
     blog_dict["id"] = len(blogs) + 1
     blog_dict["created_at"] = datetime.now()
     blogs.append(blog_dict)
