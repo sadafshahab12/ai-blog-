@@ -52,8 +52,9 @@ def get_blogs():
 
 @app.get("/blogs/{blog_id}")
 def get_single_blog(blog_id: int):
+    blogs = load_blogs()
     for blog in blogs:
-        if blog.id == blog_id:
+        if blog["id"] == blog_id:
             return blog
     raise HTTPException(status_code=404, detail="Blog not found")
 
@@ -67,3 +68,16 @@ def create_blog(blog: Blog):
     blogs.append(blog_dict)
     save_blogs(blogs)
     return {"message": "Blog created successfully", "blog": blog}
+
+
+@app.delete("/blogs/{blog_id}")
+def delete_blog(blog_id: int):
+    blogs = load_blogs()
+
+    # find the blog to delete
+    for blog in blogs:
+        if blog["id"] == blog_id:
+            blogs.remove(blog)
+            save_blogs(blogs)
+            return {"message": f"Blog with id {blog_id} deleted successfully."}
+    raise HTTPException(status_code=404, detail="Blog not found")
