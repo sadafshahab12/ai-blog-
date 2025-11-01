@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from models import Blog
 from datetime import datetime
+import os
 
 app = FastAPI()
 app.add_middleware(
@@ -28,7 +29,17 @@ blogs = [
     ),
 ]
 
+DATA_FILE = "blogs.json"
+
 
 @app.get("/blogs")
 def get_blogs():
     return blogs
+
+
+@app.get("/blogs/{blog_id}")
+def get_single_blog(blog_id: int):
+    for blog in blogs:
+        if blog.id == blog_id:
+            return blog
+    raise HTTPException(status_code=404, detail="Blog not found")

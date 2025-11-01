@@ -5,7 +5,7 @@ import BlogCard from "../components/BlogCard";
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  
+
   useEffect(() => {
     fetch("http://127.0.0.1:8000/blogs")
       .then((res) => res.json())
